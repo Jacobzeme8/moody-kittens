@@ -15,6 +15,11 @@
   --danger: #ff3737;
 }
 
+.pacifico{
+  font-family: 'Pacifico', cursive;
+
+}
+
 body{
   background-color: var(--bg);
   font-size: 16pt;
@@ -81,6 +86,11 @@ button{
   cursor: pointer;
   padding: .5em;
 }
+
+.abandon-kittons:hover{
+background-color: var(--danger);
+}
+
 button:focus{
   outline: none;
 }

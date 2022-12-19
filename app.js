@@ -1,4 +1,7 @@
+// @ts-nocheck
 let kittens = []
+let kitten = {}
+
 /**
  * Called when submitting the new Kitten Form
  * This method will pull data from the form
@@ -7,13 +10,29 @@ let kittens = []
  * Then reset the form
  */
 function addKitten(event) {
+  event.preventDefault()
+  let newKitten = event.target
+  kitten = {
+    name: newKitten.name.value,
+    mood : "tolerant",
+    id : generateId(),
+    affection : 3
+  }
+  console.log(kitten)
+  kittens.push(kitten)
+  saveKittens()
+  drawKittens()
+  newKitten.reset()
 }
+
+
 
 /**
  * Converts the kittens array to a JSON string then
  * Saves the string to localstorage at the key kittens 
  */
 function saveKittens() {
+  window.localStorage.setItem("kittens", JSON.stringify(kittens))
 }
 
 /**
@@ -22,12 +41,33 @@ function saveKittens() {
  * the kittens array to the retrieved array
  */
 function loadKittens() {
+  let kittensData = JSON.parse(window.localStorage.getItem("kittens"))
+  if(kittensData){
+    kittens = kittensData
+  }
+  
+  drawKittens()
 }
 
 /**
  * Draw all of the kittens to the kittens element
  */
 function drawKittens() {
+  let kittensCardElem = document.getElementById("kittens")
+  let kittensTemplate = ` `
+  kittens.forEach(kitten =>{
+    kittensTemplate +=`<div class = " kitten ${kitten.mood} card">
+    <img  src="Kitten.png" alt="moody-logo.png" height="100px" width="100px">
+    <p class=" pacifico d-flex justify-content-center">${kitten.name}</p>
+    <p>
+      <button onclick="pet('${kitten.id}')">Pet</button>
+      <button onclick="catnip('${kitten.id}')">Catnip</button>
+    </p>
+  </div> `
+  }
+  )
+  
+  kittensCardElem.innerHTML = kittensTemplate
 }
 
 
@@ -37,6 +77,8 @@ function drawKittens() {
  * @return {Kitten}
  */
 function findKittenById(id) {
+let index = kittens.findIndex(kitten => kitten.id == id)
+return index;
 }
 
 
@@ -49,6 +91,15 @@ function findKittenById(id) {
  * @param {string} id 
  */
 function pet(id) {
+  let index = findKittenById(id);
+  let randomNumber = Math.random()
+  if(randomNumber > .5){
+    kittens[index].affection++
+  }
+  else{
+    kittens[index].affection--
+  }
+  setKittenMood()
 }
 
 /**
@@ -65,6 +116,21 @@ function catnip(id) {
  * @param {Kitten} kitten 
  */
 function setKittenMood(kitten) {
+  kittens.forEach(kitten => {
+    if(kitten.affection > 3){
+      kitten.mood = "happy"
+    }
+    else if(kitten.affection > 1) {
+      kitten.mood = "tolerant"
+    }
+    else if(kitten.affection == 1) {
+      kitten.mood = "angry"
+    } 
+    else{kitten.mood = "gone"}
+    
+  });
+  saveKittens()
+ drawKittens()
 }
 
 /**
@@ -72,6 +138,9 @@ function setKittenMood(kitten) {
  * remember to save this change
  */
 function clearKittens(){
+  kittens.splice(0, kittens.length)
+  saveKittens()
+  drawKittens()
 }
 
 /**

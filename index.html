@@ -8,6 +8,7 @@
   <title>Moody Kittens | CodeWorks</title>
   <link rel="shortcut icon" href="moody-logo.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css?family=Catamaran&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -24,7 +25,7 @@
     </form>
   </header>
   <main class="container">
-    <div id="welcome" class="d-flex justify-content-center">
+    <div id="welcome" class="d-flex justify-content-center hidden">
       <div class="card p-2 text-center w-50">
         <img src="moody-logo.png" height="250" alt="Moody Kittens">
         <div class="mt-2">
@@ -37,8 +38,11 @@
       </div>
     </div>
     <div class="p-2">
-      <div id="kittens" class="d-flex align-items-center flex-wrap">
-      </div>
+      <div id="kittens" class="d-flex align-items-center flex-wrap"> </div>
+    </div>
+    <div class="d-flex align-items-center flex-wrap justify-content-center">
+      <button class ="abandon-kittons" onclick="clearKittens()">Abandon All Kittons</button>
+    </div>
   </main>
   <footer class="card bg-dark text-light p-2 d-flex align-items-center justify-content-center">
     <small>Created with <span style="color: var(--primary)">&hearts;</span> by CodeWorks</small>
