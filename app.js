@@ -2,6 +2,7 @@
 let kittens = []
 let kitten = {}
 
+
 /**
  * Called when submitting the new Kitten Form
  * This method will pull data from the form
@@ -12,17 +13,24 @@ let kitten = {}
 function addKitten(event) {
   event.preventDefault()
   let newKitten = event.target
+  if(kittens.find(kitten => kitten.name == newKitten.name.value)){
+    newKitten.reset()
+    throw new Error("Kitten Name already Exists!!")
+  }
+  
   kitten = {
     name: newKitten.name.value,
     mood : "tolerant",
     id : generateId(),
-    affection : 3
+    affection : 5
   }
+
+  newKitten.reset()
   console.log(kitten)
   kittens.push(kitten)
   saveKittens()
   drawKittens()
-  newKitten.reset()
+  
 }
 
 
@@ -56,13 +64,17 @@ function drawKittens() {
   let kittensCardElem = document.getElementById("kittens")
   let kittensTemplate = ` `
   kittens.forEach(kitten =>{
-    kittensTemplate +=`<div class = " kitten ${kitten.mood} card">
-    <img  src="Kitten.png" alt="moody-logo.png" height="100px" width="100px">
+    kittensTemplate +=`<div class = "kitten ${kitten.mood} card">
+    <img src="Kitten.png" alt="moody-logo.png" height="100px" width="100px">
     <p class=" pacifico d-flex justify-content-center">${kitten.name}</p>
+    <p class=" pacifico d-flex justify-content-center">${kitten.mood}</p>
     <p>
       <button onclick="pet('${kitten.id}')">Pet</button>
       <button onclick="catnip('${kitten.id}')">Catnip</button>
     </p>
+    <span class ="d-flex justify-content-center"> 
+    <button class="abandon-kittons" onclick = "abandonKitten()">Abandon</button> 
+    </span>
   </div> `
   }
   )
@@ -109,6 +121,11 @@ function pet(id) {
  * @param {string} id
  */
 function catnip(id) {
+  index = findKittenById(id)
+  kittens[index].affection = 5;
+  setKittenMood()
+  saveKittens()
+  drawKittens()
 }
 
 /**
@@ -117,13 +134,17 @@ function catnip(id) {
  */
 function setKittenMood(kitten) {
   kittens.forEach(kitten => {
-    if(kitten.affection > 3){
+    if(kitten.affection > 9){
+      kitten.affection--;
       kitten.mood = "happy"
     }
-    else if(kitten.affection > 1) {
+    else if(kitten.affection > 7){
+      kitten.mood = "happy"
+    }
+    else if(kitten.affection > 2) {
       kitten.mood = "tolerant"
     }
-    else if(kitten.affection == 1) {
+    else if(kitten.affection > 0) {
       kitten.mood = "angry"
     } 
     else{kitten.mood = "gone"}
@@ -133,6 +154,12 @@ function setKittenMood(kitten) {
  drawKittens()
 }
 
+function abandonKitten(){
+  let index = findKittenById()
+  kittens.splice(index, 1)
+  saveKittens()
+  drawKittens()
+}
 /**
  * Removes all of the kittens from the array
  * remember to save this change
