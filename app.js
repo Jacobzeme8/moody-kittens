@@ -12,6 +12,8 @@ let kitten = {}
  */
 function addKitten(event) {
   event.preventDefault()
+  let elem = document.getElementById("welcome").classList.add("hidden")
+  
   let newKitten = event.target
   if(kittens.find(kitten => kitten.name == newKitten.name.value)){
     newKitten.reset()
